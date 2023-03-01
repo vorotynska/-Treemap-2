@@ -2,31 +2,128 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script defer src="./index.js"></script>
-    <link rel="stylesheet" href="./style.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script defer src="./index.js"></script>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-  </script>
-    <title>Treemap</title>
+    </script>
+  <title>Treemap</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-          <div id="main" class="main col-md-12 text-center">
-            <div class="links">
-            <a href="#" onclick="videoGameClicked(); return false;">Video Games Data Set</a> | <a href="#" onclick="moviesClicked(); return false;">Movies Data Set</a> | <a href="#" onclick="kickStarterClicked(); return false;">KickStarter Data Set</a>
-              </div>
-                  <h2 id="title" class="title">Video Game Sales</h2>
-            <h3 id="description">Top 100 Most Sold Video Games Grouped by Platform</h3>
-          </div>
+  <header><h1> Drum Machine </h1></header>
+  <div id="app"></div>
+  <script type="text/babel">
+     const URL = "https://s3.amazonaws.com/freecodecamp/drums/";
+const SoundBank = {
+  Q : "Heater-1",
+  W : "Kick_n_Hat",
+  E : "Chord_1",
+  A : "Heater-6",
+  S : "punchy_kick_1", 
+  D : "Brk_Snr",
+  Z : "Dry_Ohh",
+  X : "Heater-3",
+  C : "Dsc_Oh"
+};
+//Sounds from example I don't normally deal with sound files...
+// This is to pass user test 6 FINALLY!!!!.
+const Test6 = {
+  81 : 'Q',
+  87 : 'W',
+  69 : 'E',
+  65 : 'A',
+  83 : 'S',
+  68 : 'D',
+  90 : 'Z',
+  88 : 'X',
+  67 : 'C'
+};
+
+class App extends React.Component {
+  constructor(props){
+    super();
+    this.state = { 
+      currentSoundId: ''
+    };
+    //bind everything
+    this.handleClickPlay = this.handleClickPlay.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.playSound = this.playSound.bind(this);
+  };  
+ componentDidMount() {
+   document.addEventListener("keydown", this.handleKeyPress);
+  };  
+  componentWillUnmount() {
+document.removeEventListener("keydown", this.handleKeyPress);
+  };  
+  playSound(){
+    document.getElementById(this.state.currentSoundId).play();
+  };
+
+handleKeyPress(event){    
+  const key = Test6[event.keyCode]; // this is to pass user test 6 FINALLY!!!!
+  const isValidKey = Object.keys(SoundBank).includes(key);
+    this.setState( { currentSoundId: (isValidKey)? key : '' } );
+};      
+handleClickPlay(event){
+  this.setState( { currentSoundId: event.target.children[0].id } );
+};  
+render() {
+    let message = 'Display sound here!';
+    if (this.state.currentSoundId) {
+      message = `Sound is: ${SoundBank[this.state.currentSoundId]}`;
+      this.playSound();  
+    };    
+    return (
+      <div id="drum-machine">
+        <Display currentSoundText={message}/><br/>
+        <div id="container">
+          {
+            Object.keys(SoundBank).map((key) => {
+              return (
+                <DrumPad
+                  name={key} 
+                  soundFile={URL + SoundBank[key] + ".mp3"}
+                  clickplayer={this.handleClickPlay}
+                  key={key}
+                />
+              )
+            })
+          }
         </div>
       </div>
-   <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script> 
+    );
+  }
+}
+//Set Prop of sound name
+function Display(props){
+    return (
+    <div id="display">
+      {props.currentSoundText}
+    </div>
+  )
+}
+//Set Prop of Key-pad
+function DrumPad(props) {
+  return (
+    <div className="drum-pad" id={props.soundFile} onClick={props.clickplayer}>
+      {props.name}
+      <audio className="clip" id={props.name} src={props.soundFile} type="audio/mp3" ></audio>
+    </div>
+  )
+}
+//Render app....
+ReactDOM.render(<App />, document.getElementById("app"));
+
+  </script>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
 </body>
 
 </html>

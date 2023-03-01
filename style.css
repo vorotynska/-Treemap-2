@@ -1,29 +1,63 @@
-.links  {
-  margin-top:1em;
+body{
+  background-color: 	#96A8C8;
 }
-
-h2 {
-  margin-top:1em;
-}
-
-svg {
-  background-color:white;
-}
-
-.cell-title {
-  color:red;
-  font-size:0.75em;
  
+header{
+ width:auto;
+ text-align: center;
+}
+ 
+h1 {
+   font-family: fantasy; font-size: 78px; 
+   color: pink;
+   text-shadow: 5px 5px 8px #000000;
+}
+ 
+footer{
+ width:auto;
+ text-align: center;
+}
+ 
+#drum-machine{
+ width:25%;
+ height:auto;
+ padding:15px;
+ margin: auto;
+ text-align:center;
+ font-size: 26px;  
 }
 
-.toolTip {
-  position: absolute;
-  display: none;
-  min-width: 80px;
-  height: auto;
-  background: none repeat scroll 0 0 #ffffff;
-  border: 1px solid #6F257F;
-  padding: 14px;
-  text-align: center;
+#container{
+ display:grid;
+ grid-template-columns:auto auto auto;
+ grid-column-gap:5px;
+ grid-row-gap:5px;
+}
+
+.drum-pad{
+ background-color: #4CAF50;
+ border: solid black 1px;
+ color: white;
+ font-size: 35px;
+ border-radius: 50%; 
+ box-shadow: 0 9px #4d4d4d;
+ cursor: pointer;
+}
+ 
+.drum-pad:hover {
+ color: black;
+ background-color: #3e8e41;
+}
+
+.drum-pad:active {
+ background-color: #3e8e41;
+ color:white;
+ box-shadow: 0 5px #666;
+ transform: translateY(4px);
+}
+ 
+p{
+font-size: 15px;
+ margin:auto; 
 }
 
